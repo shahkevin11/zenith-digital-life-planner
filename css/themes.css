@@ -1,0 +1,243 @@
+/* ============================================
+   ZENITH DIGITAL PLANNER - THEME SYSTEM
+   A calming, productivity-focused color palette
+   ============================================ */
+
+:root {
+    /* ===== Core Brand Colors ===== */
+    --primary: #5B8FB9;
+    --primary-hover: #4A7A9E;
+    --primary-light: #E8F4FC;
+    --primary-dark: #3D6B8C;
+    
+    --accent: #7FB285;
+    --accent-hover: #6A9A70;
+    --accent-light: #E8F5EA;
+    
+    /* ===== Semantic Colors ===== */
+    --success: #7FB285;
+    --warning: #E6B566;
+    --error: #D98880;
+    --info: #85B8CB;
+    
+    /* ===== Priority Colors (Desaturated for calm) ===== */
+    --priority-high: #D98880;
+    --priority-medium: #E6B566;
+    --priority-low: #A5C4D4;
+    
+    /* ===== Category Colors ===== */
+    --category-work: #7BA3C4;
+    --category-personal: #B794C7;
+    --category-health: #7FB285;
+    --category-learning: #E6B566;
+    
+    /* ===== Mood Colors for Year in Pixels ===== */
+    --mood-1: #D98880;  /* Stressed */
+    --mood-2: #E6B566;  /* Low */
+    --mood-3: #C4C4C4;  /* Okay */
+    --mood-4: #A5D6A7;  /* Good */
+    --mood-5: #7FB285;  /* Great */
+    --mood-empty: #F0F0F0;
+    
+    /* ===== Typography ===== */
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    /* ===== Spacing Scale ===== */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+    
+    /* ===== Border Radius ===== */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+    
+    /* ===== Shadows ===== */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
+    
+    /* ===== Transitions ===== */
+    --transition-fast: 150ms ease;
+    --transition-base: 250ms ease;
+    --transition-slow: 400ms ease;
+    
+    /* ===== Z-Index Scale ===== */
+    --z-base: 1;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-modal: 1000;
+    --z-toast: 1100;
+    --z-focus: 2000;
+}
+
+/* ===== LIGHT THEME (Default) ===== */
+[data-theme="light"] {
+    --bg-primary: #FAFBFC;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #F5F7FA;
+    --bg-hover: #EDF1F5;
+    --bg-active: #E5EBF0;
+    
+    --text-primary: #2D3748;
+    --text-secondary: #5A6B7D;
+    --text-tertiary: #8899A8;
+    --text-muted: #A0AEC0;
+    --text-inverse: #FFFFFF;
+    
+    --border-light: #E8ECF1;
+    --border-medium: #D1D9E0;
+    --border-dark: #B8C4CE;
+    
+    --sidebar-bg: #FFFFFF;
+    --sidebar-border: #E8ECF1;
+    --card-bg: #FFFFFF;
+    --input-bg: #F5F7FA;
+    --input-border: #D1D9E0;
+    --input-focus: var(--primary);
+    
+    --overlay-bg: rgba(45, 55, 72, 0.5);
+    --highlight-bg: linear-gradient(135deg, #FFF9E6 0%, #FFF5D6 100%);
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #5B8FB9 0%, #7BA3C4 100%);
+    --gradient-accent: linear-gradient(135deg, #7FB285 0%, #9BC59F 100%);
+    --gradient-warm: linear-gradient(135deg, #F9E4C8 0%, #F5D7B0 100%);
+    --gradient-cool: linear-gradient(135deg, #E8F4FC 0%, #D4E9F7 100%);
+}
+
+/* ===== DARK THEME ===== */
+[data-theme="dark"] {
+    --bg-primary: #1A1D24;
+    --bg-secondary: #22262F;
+    --bg-tertiary: #2A2F3A;
+    --bg-hover: #323845;
+    --bg-active: #3A4250;
+    
+    --text-primary: #E8ECF1;
+    --text-secondary: #B8C4CE;
+    --text-tertiary: #8899A8;
+    --text-muted: #6B7A8A;
+    --text-inverse: #1A1D24;
+    
+    --border-light: #323845;
+    --border-medium: #3A4250;
+    --border-dark: #4A5568;
+    
+    --sidebar-bg: #22262F;
+    --sidebar-border: #323845;
+    --card-bg: #22262F;
+    --input-bg: #2A2F3A;
+    --input-border: #3A4250;
+    --input-focus: #7BA3C4;
+    
+    --overlay-bg: rgba(0, 0, 0, 0.7);
+    --highlight-bg: linear-gradient(135deg, #3D3520 0%, #4A4025 100%);
+    
+    /* Adjusted colors for dark mode */
+    --primary: #7BA3C4;
+    --primary-hover: #8FB3D1;
+    --primary-light: #2A3F50;
+    --accent: #8BC28F;
+    --accent-light: #2A3F2D;
+    
+    --success: #8BC28F;
+    --warning: #E8C57A;
+    --error: #E29D97;
+    
+    --mood-empty: #2A2F3A;
+    
+    /* Shadows for dark mode */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.35);
+    
+    /* Gradients for dark mode */
+    --gradient-primary: linear-gradient(135deg, #4A7A9E 0%, #5B8FB9 100%);
+    --gradient-accent: linear-gradient(135deg, #6A9A70 0%, #7FB285 100%);
+    --gradient-warm: linear-gradient(135deg, #4A4025 0%, #3D3520 100%);
+    --gradient-cool: linear-gradient(135deg, #2A3F50 0%, #243545 100%);
+}
+
+/* ===== Theme Toggle Transitions ===== */
+html {
+    color-scheme: light dark;
+}
+
+body,
+.sidebar,
+.card,
+.modal,
+input,
+select,
+textarea,
+button {
+    transition: 
+        background-color var(--transition-base),
+        border-color var(--transition-base),
+        color var(--transition-base),
+        box-shadow var(--transition-base);
+}
+
+/* ===== Theme Toggle Icon States ===== */
+[data-theme="light"] .moon-icon {
+    display: none;
+}
+
+[data-theme="light"] .sun-icon {
+    display: block;
+}
+
+[data-theme="dark"] .sun-icon {
+    display: none;
+}
+
+[data-theme="dark"] .moon-icon {
+    display: block;
+}
+
+/* ===== Scrollbar Styling ===== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-medium);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--border-dark);
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-medium) var(--bg-tertiary);
+}
+
+/* ===== Selection Styling ===== */
+::selection {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+[data-theme="dark"] ::selection {
+    background: var(--primary-light);
+    color: var(--text-primary);
+}
