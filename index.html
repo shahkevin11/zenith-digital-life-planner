@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenith - Digital Life Planner</title>
+    <meta name="description" content="A premium digital planner for high productivity and low stress. Balance your personal and professional life.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◎</text></svg>">
+</head>
+<body>
+    <!-- Onboarding Modal -->
+    <div id="onboarding-modal" class="modal-overlay" style="display: none;">
+        <div class="modal onboarding-modal">
+            <div class="onboarding-header">
+                <div class="logo-large">◎</div>
+                <h1>Welcome to Zenith</h1>
+                <p class="subtitle">Your sanctuary for mindful productivity</p>
+            </div>
+            <div class="onboarding-content">
+                <div class="onboarding-step active" data-step="1">
+                    <h2>What's your name?</h2>
+                    <p>Let's personalize your experience</p>
+                    <input type="text" id="user-name-input" placeholder="Enter your name" class="onboarding-input" autofocus>
+                </div>
+                <div class="onboarding-step" data-step="2">
+                    <h2>Set your work hours</h2>
+                    <p>We'll help protect your personal time</p>
+                    <div class="time-inputs">
+                        <div class="time-group">
+                            <label>Start</label>
+                            <input type="time" id="work-start" value="09:00" class="time-input">
+                        </div>
+                        <span class="time-separator">to</span>
+                        <div class="time-group">
+                            <label>End</label>
+                            <input type="time" id="work-end" value="17:00" class="time-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="onboarding-step" data-step="3">
+                    <h2>Daily focus capacity</h2>
+                    <p>How many hours of deep work can you realistically do?</p>
+                    <div class="capacity-selector">
+                        <button class="capacity-btn" data-hours="3">3 hrs</button>
+                        <button class="capacity-btn" data-hours="4">4 hrs</button>
+                        <button class="capacity-btn active" data-hours="5">5 hrs</button>
+                        <button class="capacity-btn" data-hours="6">6 hrs</button>
+                    </div>
+                    <p class="hint">Most people can sustain 4-5 hours of focused work daily</p>
+                </div>
+            </div>
+            <div class="onboarding-footer">
+                <button id="onboarding-back" class="btn btn-secondary" style="visibility: hidden;">Back</button>
+                <div class="step-indicators">
+                    <span class="step-dot active"></span>
+                    <span class="step-dot"></span>
+                    <span class="step-dot"></span>
+                </div>
+                <button id="onboarding-next" class="btn btn-primary">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">◎</span>
+                    <span class="logo-text">Zenith</span>
+                </div>
+                <button id="theme-toggle" class="icon-btn" title="Toggle theme">
+                    <svg class="icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                    </svg>
+                    <svg class="icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-view="daily">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>Today</span>
+                </button>
+                <button class="nav-item" data-view="weekly">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 9h16M4 15h16M10 3v18M14 3v18"></path>
+                    </svg>
+                    <span>Week</span>
+                </button>
+                <button class="nav-item" data-view="monthly">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                        <line x1="9" y1="4" x2="9" y2="22"></line>
+                        <line x1="15" y1="4" x2="15" y2="22"></line>
+                        <line x1="3" y1="16" x2="21" y2="16"></line>
+                    </svg>
+                    <span>Month</span>
+                </button>
+                <button class="nav-item" data-view="yearly">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>Year</span>
+                </button>
+                
+                <div class="nav-divider"></div>
+                
+                <button class="nav-item" data-view="habits">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span>Habits</span>
+                </button>
+                <button class="nav-item" data-view="goals">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span>Goals</span>
+                </button>
+                <button class="nav-item" data-view="analytics">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <span>Insights</span>
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">U</div>
+                    <span class="user-name" id="user-display-name">User</span>
+                </div>
+                <button id="settings-btn" class="icon-btn" title="Settings">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Daily View -->
+            <section id="daily-view" class="view active">
+                <header class="view-header">
+                    <div class="header-left">
+                        <h1 class="greeting" id="greeting">Good morning</h1>
+                        <p class="date-display" id="current-date">Monday, January 12, 2026</p>
+                    </div>
+                    <div class="header-right">
+                        <div class="capacity-indicator">
+                            <div class="capacity-ring" id="capacity-ring">
+                                <svg viewBox="0 0 36 36">
+                                    <path class="capacity-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                    <path class="capacity-fill" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                </svg>
+                                <span class="capacity-text">0h</span>
+                            </div>
+                            <div class="capacity-label">
+                                <span>Planned</span>
+                                <span class="capacity-max" id="capacity-max">of 5h capacity</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="daily-layout">
+                    <!-- Left Column: Tasks & Focus -->
+                    <div class="daily-left">
+                        <!-- Daily Highlight -->
+                        <div class="card highlight-card">
+                            <div class="card-header">
+                                <h3>
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                    Today's Highlight
+                                </h3>
+                                <span class="hint-text">What would make today successful?</span>
+                            </div>
+                            <div class="highlight-content">
+                                <input type="text" id="daily-highlight" class="highlight-input" placeholder="Set your main focus for today...">
+                                <div class="highlight-display" id="highlight-display" style="display: none;">
+                                    <span class="highlight-text"></span>
+                                    <button class="edit-btn" title="Edit">
+                                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tasks -->
+                        <div class="card tasks-card">
+                            <div class="card-header">
+                                <h3>
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 11l3 3L22 4"></path>
+                                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                                    </svg>
+                                    Today's Tasks
+                                </h3>
+                                <button class="btn btn-small" id="add-task-btn">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                    Add Task
+                                </button>
+                            </div>
+                            <div class="tasks-container" id="tasks-container">
+                                <!-- Tasks will be rendered here -->
+                            </div>
+                            <div class="add-task-form" id="add-task-form" style="display: none;">
+                                <input type="text" id="new-task-title" placeholder="What needs to be done?" class="task-input">
+                                <div class="task-form-row">
+                                    <select id="new-task-priority" class="task-select">
+                                        <option value="low">Low Priority</option>
+                                        <option value="medium" selected>Medium Priority</option>
+                                        <option value="high">High Priority</option>
+                                    </select>
+                                    <select id="new-task-category" class="task-select">
+                                        <option value="work">💼 Work</option>
+                                        <option value="personal">🏠 Personal</option>
+                                        <option value="health">💪 Health</option>
+                                        <option value="learning">📚 Learning</option>
+                                    </select>
+                                    <input type="number" id="new-task-duration" placeholder="Duration (min)" class="task-duration" min="5" step="5" value="30">
+                                </div>
+                                <div class="task-form-actions">
+                                    <button class="btn btn-secondary" id="cancel-task-btn">Cancel</button>
+                                    <button class="btn btn-primary" id="save-task-btn">Add Task</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Schedule & Tracking -->
+                    <div class="daily-right">
+                        <!-- Time Blocks -->
+                        <div class="card schedule-card">
+                            <div class="card-header">
+                                <h3>
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    Time Blocks
+                                </h3>
+                                <button class="btn btn-small" id="add-block-btn">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                    Add Block
+                                </button>
+                            </div>
+                            <div class="schedule-timeline" id="schedule-timeline">
+                                <!-- Time blocks will be rendered here -->
+                            </div>
+                        </div>
+
+                        <!-- Daily Trackers -->
+                        <div class="card trackers-card">
+                            <div class="card-header">
+                                <h3>
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
+                                    Daily Check-in
+                                </h3>
+                            </div>
+                            <div class="trackers-grid">
+                                <div class="tracker-item">
+                                    <label>Energy Level</label>
+                                    <div class="tracker-scale" data-tracker="energy">
+                                        <button data-value="1">1</button>
+                                        <button data-value="2">2</button>
+                                        <button data-value="3">3</button>
+                                        <button data-value="4">4</button>
+                                        <button data-value="5">5</button>
+                                    </div>
+                                </div>
+                                <div class="tracker-item">
+                                    <label>Mood</label>
+                                    <div class="tracker-scale mood-tracker" data-tracker="mood">
+                                        <button data-value="1" title="Stressed">😫</button>
+                                        <button data-value="2" title="Low">😔</button>
+                                        <button data-value="3" title="Okay">😐</button>
+                                        <button data-value="4" title="Good">🙂</button>
+                                        <button data-value="5" title="Great">😊</button>
+                                    </div>
+                                </div>
+                                <div class="tracker-item">
+                                    <label>Sleep Quality</label>
+                                    <div class="tracker-scale" data-tracker="sleep">
+                                        <button data-value="1">1</button>
+                                        <button data-value="2">2</button>
+                                        <button data-value="3">3</button>
+                                        <button data-value="4">4</button>
+                                        <button data-value="5">5</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shutdown Ritual Button -->
+                <div class="shutdown-section">
+                    <button class="btn btn-shutdown" id="shutdown-btn">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                            <line x1="12" y1="2" x2="12" y2="12"></line>
+                        </svg>
+                        Begin Shutdown Ritual
+                    </button>
+                </div>
+            </section>
+
+            <!-- Weekly View -->
+            <section id="weekly-view" class="view">
+                <header class="view-header">
+                    <div class="header-left">
+                        <h1>Weekly Overview</h1>
+                        <div class="week-navigator">
+                            <button class="nav-btn" id="prev-week">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <span class="week-display" id="week-display">Jan 6 - Jan 12, 2026</span>
+                            <button class="nav-btn" id="next-week">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="weekly-content">
+                    <!-- Weekly Objectives -->
+                    <div class="card weekly-objectives-card">
+                        <div class="card-header">
+                            <h3>
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <circle cx="12" cy="12" r="6"></circle>
+                                    <circle cx="12" cy="12" r="2"></circle>
+                                </svg>
+                                Weekly Objectives
+                            </h3>
+                            <button class="btn btn-small" id="add-objective-btn">Add Objective</button>
+                        </div>
+                        <div class="objectives-list" id="weekly-objectives-list">
+                            <!-- Weekly objectives will be rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- Week Grid -->
+                    <div class="week-grid" id="week-grid">
+                        <!-- Days will be rendered here -->
+                    </div>
+
+                    <!-- Weekly Stats -->
+                    <div class="weekly-stats">
+                        <div class="stat-card">
+                            <div class="stat-value" id="weekly-tasks-completed">0</div>
+                            <div class="stat-label">Tasks Completed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="weekly-focus-hours">0h</div>
+                            <div class="stat-label">Focus Hours</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="weekly-habit-rate">0%</div>
+                            <div class="stat-label">Habit Completion</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monthly View -->
+            <section id="monthly-view" class="view">
+                <header class="view-header">
+                    <div class="header-left">
+                        <h1>Monthly View</h1>
+                        <div class="month-navigator">
+                            <button class="nav-btn" id="prev-month">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <span class="month-display" id="month-display">January 2026</span>
+                            <button class="nav-btn" id="next-month">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="monthly-content">
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- Calendar will be rendered here -->
+                    </div>
+                    
+                    <div class="monthly-sidebar">
+                        <div class="card">
+                            <h3>Monthly Goals</h3>
+                            <div class="monthly-goals-list" id="monthly-goals-list">
+                                <!-- Monthly goals will be rendered here -->
+                            </div>
+                            <button class="btn btn-small" id="add-monthly-goal-btn">Add Goal</button>
+                        </div>
+                        
+                        <div class="card month-summary">
+                            <h3>Month at a Glance</h3>
+                            <div class="summary-grid">
+                                <div class="summary-item">
+                                    <span class="summary-value" id="month-tasks">0</span>
+                                    <span class="summary-label">Tasks</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-value" id="month-events">0</span>
+                                    <span class="summary-label">Events</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-value" id="month-avg-mood">-</span>
+                                    <span class="summary-label">Avg Mood</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Yearly View -->
+            <section id="yearly-view" class="view">
+                <header class="view-header">
+                    <div class="header-left">
+                        <h1>2026 Overview</h1>
+                        <p class="subtitle">Your year in pixels</p>
+                    </div>
+                </header>
+
+                <div class="yearly-content">
+                    <!-- Year in Pixels -->
+                    <div class="card year-pixels-card">
+                        <div class="card-header">
+                            <h3>Year in Pixels - Mood Tracker</h3>
+                            <div class="pixel-legend">
+                                <span class="legend-item"><span class="pixel" style="background: var(--mood-1)"></span> Stressed</span>
+                                <span class="legend-item"><span class="pixel" style="background: var(--mood-2)"></span> Low</span>
+                                <span class="legend-item"><span class="pixel" style="background: var(--mood-3)"></span> Okay</span>
+                                <span class="legend-item"><span class="pixel" style="background: var(--mood-4)"></span> Good</span>
+                                <span class="legend-item"><span class="pixel" style="background: var(--mood-5)"></span> Great</span>
+                            </div>
+                        </div>
+                        <div class="year-pixels-grid" id="year-pixels-grid">
+                            <!-- Year pixels will be rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- Yearly Goals -->
+                    <div class="card yearly-goals-card">
+                        <div class="card-header">
+                            <h3>
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                    <path d="M2 17l10 5 10-5"></path>
+                                    <path d="M2 12l10 5 10-5"></path>
+                                </svg>
+                                Annual Goals
+                            </h3>
+                            <button class="btn btn-small" id="add-yearly-goal-btn">Add Goal</button>
+                        </div>
+                        <div class="yearly-goals-list" id="yearly-goals-list">
+                            <!-- Yearly goals will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Habits View -->
+            <section id="habits-view" class="view">
+                <header class="view-header">
+                    <div class="header-left">
+                        <h1>Habits</h1>
+                        <p class="subtitle">Build routines that stick</p>
+                    </div>
+                    <button class="btn btn-primary" id="add-habit-btn">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        New Habit
+                    </button>
+                </header>
+
+                <div class="habits-content">
+                    <div class="habits-list" id="habits-list">
+                        <!-- Habits will be rendered here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Goals View -->
+            <section id="goals-view" class="view">
+                <header class="view-header">
+                    <div class="header-left">
+                        <h1>Goals & OKRs</h1>
+                        <p class="subtitle">Track what matters most</p>
+                    </div>
+                </header>
+
+                <div class="goals-content">
+                    <!-- Life Areas -->
+                    <div class="life-areas-grid" id="life-areas-grid">
+                        <div class="life-area-card" data-area="career">
+                            <div class="area-icon">💼</div>
+                            <h3>Career</h3>
+                            <div class="area-progress">
+                                <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
+                                <span class="progress-text">0% complete</span>
+                            </div>
+                            <div class="area-goals" id="career-goals"></div>
+                        </div>
+                        <div class="life-area-card" data-area="health">
+                            <div class="area-icon">💪</div>
+                            <h3>Health & Fitness</h3>
+                            <div class="area-progress">
+                                <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
+                                <span class="progress-text">0% complete</span>
+                            </div>
+                            <div class="area-goals" id="health-goals"></div>
+                        </div>
+                        <div class="life-area-card" data-area="relationships">
+                            <div class="area-icon">❤️</div>
+                            <h3>Relationships</h3>
+                            <div class="area-progress">
+                                <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
+                                <span class="progress-text">0% complete</span>
+                            </div>
+                            <div class="area-goals" id="relationships-goals"></div>
+                        </div>
+                        <div class="life-area-card" data-area="finance">
+                            <div class="area-icon">💰</div>
+                            <h3>Finance</h3>
+                            <div class="area-progress">
+                                <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
+                                <span class="progress-text">0% complete</span>
+                            </div>
+                            <div class="area-goals" id="finance-goals"></div>
+                        </div>
+                        <div class="life-area-card" data-area="learning">
+                            <div class="area-icon">📚</div>
+                            <h3>Learning</h3>
+                            <div class="area-progress">
+                                <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
+                                <span class="progress-text">0% complete</span>
+                            </div>
+                            <div class="area-goals" id="learning-goals"></div>
+                        </div>
+                        <div class="life-area-card" data-area="creativity">
+                            <div class="area-icon">🎨</div>
+                            <h3>Creativity</h3>
+                            <div class="area-progress">
+                                <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
+                                <span class="progress-text">0% complete</span>
+                            </div>
+                            <div class="area-goals" id="creativity-goals"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics/Insights View -->
+            <section id="analytics-view" class="view">
+                <header class="view-header">
+                    <div class="header-left">
+                        <h1>Insights</h1>
+                        <p class="subtitle">Understand your patterns</p>
+                    </div>
+                    <div class="time-filter">
+                        <button class="filter-btn active" data-range="week">Week</button>
+                        <button class="filter-btn" data-range="month">Month</button>
+                        <button class="filter-btn" data-range="quarter">Quarter</button>
+                    </div>
+                </header>
+
+                <div class="analytics-content">
+                    <div class="analytics-grid">
+                        <!-- Productivity Score -->
+                        <div class="card analytics-card">
+                            <h3>Productivity Score</h3>
+                            <div class="big-stat">
+                                <span class="big-number" id="productivity-score">78</span>
+                                <span class="big-label">/ 100</span>
+                            </div>
+                            <p class="stat-description">Based on task completion and focus time</p>
+                        </div>
+
+                        <!-- Task Completion -->
+                        <div class="card analytics-card">
+                            <h3>Task Completion</h3>
+                            <div class="chart-container" id="task-completion-chart">
+                                <!-- Chart will be rendered here -->
+                            </div>
+                        </div>
+
+                        <!-- Energy Patterns -->
+                        <div class="card analytics-card wide">
+                            <h3>Energy & Mood Patterns</h3>
+                            <div class="patterns-chart" id="patterns-chart">
+                                <!-- Patterns chart will be rendered here -->
+                            </div>
+                        </div>
+
+                        <!-- Category Breakdown -->
+                        <div class="card analytics-card">
+                            <h3>Time by Category</h3>
+                            <div class="category-breakdown" id="category-breakdown">
+                                <div class="category-row">
+                                    <span class="category-label">💼 Work</span>
+                                    <div class="category-bar"><div class="category-fill work" style="width: 60%"></div></div>
+                                    <span class="category-value">60%</span>
+                                </div>
+                                <div class="category-row">
+                                    <span class="category-label">🏠 Personal</span>
+                                    <div class="category-bar"><div class="category-fill personal" style="width: 25%"></div></div>
+                                    <span class="category-value">25%</span>
+                                </div>
+                                <div class="category-row">
+                                    <span class="category-label">💪 Health</span>
+                                    <div class="category-bar"><div class="category-fill health" style="width: 10%"></div></div>
+                                    <span class="category-value">10%</span>
+                                </div>
+                                <div class="category-row">
+                                    <span class="category-label">📚 Learning</span>
+                                    <div class="category-bar"><div class="category-fill learning" style="width: 5%"></div></div>
+                                    <span class="category-value">5%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Streaks -->
+                        <div class="card analytics-card">
+                            <h3>Current Streaks</h3>
+                            <div class="streaks-list" id="streaks-list">
+                                <!-- Streaks will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Shutdown Ritual Modal -->
+    <div id="shutdown-modal" class="modal-overlay" style="display: none;">
+        <div class="modal shutdown-modal">
+            <div class="modal-header">
+                <h2>Shutdown Ritual</h2>
+                <p>Time to close out your day mindfully</p>
+            </div>
+            <div class="shutdown-steps">
+                <div class="shutdown-step active" data-step="1">
+                    <h3>Review Today's Accomplishments</h3>
+                    <div class="completed-tasks-review" id="completed-tasks-review">
+                        <!-- Completed tasks will be shown here -->
+                    </div>
+                    <div class="reflection-prompt">
+                        <label>What went well today?</label>
+                        <textarea id="shutdown-wins" placeholder="Celebrate your wins, big or small..."></textarea>
+                    </div>
+                </div>
+                <div class="shutdown-step" data-step="2">
+                    <h3>Incomplete Tasks</h3>
+                    <p>Decide what to do with remaining tasks:</p>
+                    <div class="incomplete-tasks-review" id="incomplete-tasks-review">
+                        <!-- Incomplete tasks will be shown here -->
+                    </div>
+                </div>
+                <div class="shutdown-step" data-step="3">
+                    <h3>Plan Tomorrow's Highlight</h3>
+                    <input type="text" id="tomorrow-highlight" class="highlight-input" placeholder="What's the one thing you want to accomplish tomorrow?">
+                    <div class="tomorrow-top-tasks">
+                        <label>Top 3 priorities for tomorrow:</label>
+                        <input type="text" class="tomorrow-task" placeholder="1. Most important task">
+                        <input type="text" class="tomorrow-task" placeholder="2. Second priority">
+                        <input type="text" class="tomorrow-task" placeholder="3. Third priority">
+                    </div>
+                </div>
+                <div class="shutdown-step" data-step="4">
+                    <h3>Shutdown Complete ✨</h3>
+                    <p class="shutdown-message">You've earned your rest. Tomorrow's plan is set.</p>
+                    <div class="shutdown-summary">
+                        <div class="summary-stat">
+                            <span class="stat-value" id="shutdown-completed">0</span>
+                            <span class="stat-label">Tasks Completed</span>
+                        </div>
+                        <div class="summary-stat">
+                            <span class="stat-value" id="shutdown-focus">0h</span>
+                            <span class="stat-label">Focus Time</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="shutdown-back" style="visibility: hidden;">Back</button>
+                <button class="btn btn-primary" id="shutdown-next">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generic Modal for adding items -->
+    <div id="generic-modal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title">Add Item</h2>
+                <button class="close-modal" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+                <button class="btn btn-primary" id="modal-save">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Focus Mode Overlay -->
+    <div id="focus-mode" class="focus-overlay" style="display: none;">
+        <div class="focus-content">
+            <div class="focus-task" id="focus-task-name">Current Task</div>
+            <div class="focus-timer" id="focus-timer">25:00</div>
+            <div class="focus-controls">
+                <button class="btn btn-icon" id="focus-pause">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                </button>
+                <button class="btn btn-icon" id="focus-stop">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    </svg>
+                </button>
+            </div>
+            <button class="btn btn-secondary focus-exit" id="focus-exit">Exit Focus Mode</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay" style="display: none;">
+        <div class="modal settings-modal">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="close-modal" id="close-settings">&times;</button>
+            </div>
+            <div class="settings-content">
+                <div class="settings-section">
+                    <h3>Profile</h3>
+                    <div class="setting-row">
+                        <label>Name</label>
+                        <input type="text" id="settings-name" class="settings-input">
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Work Hours</h3>
+                    <div class="setting-row">
+                        <label>Start Time</label>
+                        <input type="time" id="settings-work-start" class="settings-input">
+                    </div>
+                    <div class="setting-row">
+                        <label>End Time</label>
+                        <input type="time" id="settings-work-end" class="settings-input">
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Daily Capacity</h3>
+                    <div class="setting-row">
+                        <label>Focus Hours</label>
+                        <select id="settings-capacity" class="settings-input">
+                            <option value="3">3 hours</option>
+                            <option value="4">4 hours</option>
+                            <option value="5">5 hours</option>
+                            <option value="6">6 hours</option>
+                            <option value="7">7 hours</option>
+                            <option value="8">8 hours</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Pomodoro Timer</h3>
+                    <div class="setting-row">
+                        <label>Focus Duration (min)</label>
+                        <input type="number" id="settings-pomodoro" class="settings-input" min="15" max="60" value="25">
+                    </div>
+                    <div class="setting-row">
+                        <label>Break Duration (min)</label>
+                        <input type="number" id="settings-break" class="settings-input" min="3" max="15" value="5">
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Data</h3>
+                    <div class="setting-row">
+                        <button class="btn btn-secondary" id="export-data">Export Data</button>
+                        <button class="btn btn-secondary" id="import-data">Import Data</button>
+                    </div>
+                    <div class="setting-row danger">
+                        <button class="btn btn-danger" id="reset-data">Reset All Data</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="save-settings">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/storage.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
